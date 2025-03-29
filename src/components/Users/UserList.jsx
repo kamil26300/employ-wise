@@ -9,8 +9,10 @@ import {
   Box,
   Button,
   Typography,
+  TextField,
   AppBar,
   Toolbar,
+  IconButton,
 } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
@@ -30,6 +32,7 @@ const UserList = () => {
   const [deletingUserId, setDeletingUserId] = useState(null);
   const [editingUser, setEditingUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const { logout } = useAuth();
 
@@ -51,7 +54,7 @@ const UserList = () => {
   useEffect(() => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
   }, [usersResponse.page]);
 
@@ -79,7 +82,7 @@ const UserList = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   const handleCloseModal = () => {
@@ -96,6 +99,12 @@ const UserList = () => {
     }));
     handleCloseModal();
   };
+
+  const filteredUsers = usersResponse.data.filter(
+    (user) =>
+      user?.name?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
+      user?.email?.toLowerCase().includes(searchQuery?.toLowerCase())
+  );
 
   const modalStyles = {
     overlay: {
@@ -138,33 +147,47 @@ const UserList = () => {
           zIndex: 10,
           backgroundColor: "white",
           color: "black",
-          px: 12,
-          py: 1,
         }}
+        className="px-6 md:px-12 py-1"
       >
         <Toolbar sx={{ justifyContent: "space-between" }}>
-          <Typography variant="h4">User Management</Typography>
-          <Button
-            color="error"
-            onClick={handleLogout}
-            variant="contained"
-            startIcon={<LogoutIcon />}
-          >
-            Logout
-          </Button>
+          <p className="text-xl sm:text-3xl">User Management</p>
+          <div className="sm:flex hidden">
+            <Button
+              color="error"
+              onClick={handleLogout}
+              variant="contained"
+              startIcon={<LogoutIcon />}
+            >
+              Logout
+            </Button>
+          </div>
+          <div className="sm:hidden flex">
+            <IconButton onClick={handleLogout} color="error">
+              <LogoutIcon />
+            </IconButton>
+          </div>
         </Toolbar>
       </AppBar>
 
       <Box
         sx={{
           flexGrow: 1,
-          p: 4,
           display: "flex",
           flexDirection: "column",
         }}
+        className="px-8 sm:px-16 py-4"
       >
+        <TextField
+          label="Search Users"
+          variant="outlined"
+          fullWidth
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          sx={{ mb: 3 }}
+        />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-4 container mx-auto">
-          {usersResponse.data.map((user) => (
+          {filteredUsers?.map((user) => (
             <UserCard
               user={user}
               onEdit={() => handleEdit(user)}
@@ -192,7 +215,8 @@ const UserList = () => {
           <Typography variant="body2" color="text.secondary">
             Showing {(usersResponse.page - 1) * usersResponse.per_page + 1} to{" "}
             {Math.min(
-              (usersResponse.page - 1) * usersResponse.per_page + usersResponse.data.length,
+              (usersResponse.page - 1) * usersResponse.per_page +
+                filteredUsers.length,
               usersResponse.total
             )}{" "}
             of {usersResponse.total} users
@@ -219,28 +243,30 @@ const UserList = () => {
             Previous
           </Button>
 
-          {[...Array(usersResponse.total_pages)].map((_, index) => (
-            <Button
-              key={index}
-              variant={
-                index + 1 === usersResponse.page ? "contained" : "outlined"
-              }
-              color="primary"
-              onClick={() =>
-                setUsersResponse((prev) => ({ ...prev, page: index + 1 }))
-              }
-              sx={{
-                mx: 0.5,
-                minWidth: "40px",
-                ...(index + 1 === usersResponse.page && {
-                  bgcolor: "primary.main",
-                  color: "white",
-                }),
-              }}
-            >
-              {index + 1}
-            </Button>
-          ))}
+          <div className="sm:flex hidden">
+            {[...Array(usersResponse.total_pages)].map((_, index) => (
+              <Button
+                key={index}
+                variant={
+                  index + 1 === usersResponse.page ? "contained" : "outlined"
+                }
+                color="primary"
+                onClick={() =>
+                  setUsersResponse((prev) => ({ ...prev, page: index + 1 }))
+                }
+                sx={{
+                  mx: 0.5,
+                  minWidth: "40px",
+                  ...(index + 1 === usersResponse.page && {
+                    bgcolor: "primary.main",
+                    color: "white",
+                  }),
+                }}
+              >
+                {index + 1}
+              </Button>
+            ))}
+          </div>
 
           <Button
             variant="contained"
