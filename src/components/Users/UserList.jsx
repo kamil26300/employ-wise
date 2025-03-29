@@ -197,7 +197,7 @@ const UserList = () => {
           <Typography variant="body2" color="text.secondary">
             Showing {(usersResponse.page - 1) * usersResponse.per_page + 1} to{" "}
             {Math.min(
-              usersResponse.page * usersResponse.per_page,
+              (usersResponse.page - 1) * usersResponse.per_page + usersResponse.data.length,
               usersResponse.total
             )}{" "}
             of {usersResponse.total} users
