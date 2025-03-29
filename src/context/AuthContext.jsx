@@ -20,7 +20,6 @@ export const AuthProvider = ({ children }) => {
     toast.success("Logged out successfully!");
   };
 
-  // Optional: Add token validation if needed
   useEffect(() => {
     setIsAuthenticated(!!token);
   }, [token]);

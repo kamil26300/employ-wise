@@ -16,7 +16,6 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
-// Set the app element for accessibility
 Modal.setAppElement("#root");
 
 const UserList = () => {
@@ -130,7 +129,6 @@ const UserList = () => {
         position: "relative",
       }}
     >
-      {/* Fixed Header */}
       <AppBar
         position="sticky"
         sx={{
@@ -157,7 +155,6 @@ const UserList = () => {
         </Toolbar>
       </AppBar>
 
-      {/* Main Content */}
       <Box
         sx={{
           flexGrow: 1,
@@ -166,7 +163,6 @@ const UserList = () => {
           flexDirection: "column",
         }}
       >
-        {/* User List Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-4 container mx-auto">
           {usersResponse.data.map((user) => (
             <UserCard
@@ -178,7 +174,6 @@ const UserList = () => {
           ))}
         </div>
 
-        {/* Loading Indicator */}
         {loading && (
           <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
             <CircularProgress />
