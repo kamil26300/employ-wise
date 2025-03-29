@@ -44,6 +44,7 @@ const UserCard = ({ user, onEdit, onDelete, isDeleting }) => {
           justifyContent: "space-between",
           p: 2,
           pt: 0,
+          gap: 4,
         }}
       >
         <Button
@@ -51,7 +52,7 @@ const UserCard = ({ user, onEdit, onDelete, isDeleting }) => {
           color="primary"
           onClick={onEdit}
           startIcon={<EditIcon />}
-          sx={{ flexGrow: 1, mr: 1 }}
+          sx={{ flexGrow: 1 }}
         >
           Edit
         </Button>
@@ -61,7 +62,7 @@ const UserCard = ({ user, onEdit, onDelete, isDeleting }) => {
           onClick={onDelete}
           startIcon={<DeleteOutlineIcon />}
           disabled={isDeleting}
-          sx={{ flexGrow: 1, ml: 1 }}
+          sx={{ flexGrow: 1 }}
         >
           {isDeleting ? (
             <CircularProgress size={24} color="inherit" />
