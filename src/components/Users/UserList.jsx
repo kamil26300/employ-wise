@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 // Set the app element for accessibility
 Modal.setAppElement("#root");
@@ -31,6 +32,7 @@ const UserList = () => {
   const [editingUser, setEditingUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -77,8 +79,8 @@ const UserList = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/");
+    logout();
+    navigate('/login');
   };
 
   const handleCloseModal = () => {

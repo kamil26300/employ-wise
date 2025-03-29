@@ -9,19 +9,21 @@ import {
   Box,
   Typography,
 } from "@mui/material";
+import { useAuth } from "../../context/AuthContext";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login: setToken } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
       const response = await login(email, password);
-      localStorage.setItem("token", response.data.token);
+      setToken(response.data.token);
       toast.success("Login successful!");
       navigate("/users");
     } catch (error) {
