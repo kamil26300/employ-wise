@@ -15,6 +15,7 @@ import {
   IconButton,
 } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
+import StorageIcon from "@mui/icons-material/Storage";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
@@ -102,9 +103,14 @@ const UserList = () => {
 
   const filteredUsers = usersResponse.data.filter(
     (user) =>
-      user?.name?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
-      user?.email?.toLowerCase().includes(searchQuery?.toLowerCase())
+      user.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.last_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleClearFilter = () => {
+    setSearchQuery("");
+  };
 
   const modalStyles = {
     overlay: {
@@ -186,6 +192,23 @@ const UserList = () => {
           onChange={(e) => setSearchQuery(e.target.value)}
           sx={{ mb: 3 }}
         />
+
+        {filteredUsers.length === 0 && !loading && (
+          <Box className="flex my-4 items-center justify-center gap-2">
+            <StorageIcon color="text.secondary" />
+            <Typography variant="h6" color="text.secondary">
+              No data found
+            </Typography>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={handleClearFilter}
+            >
+              Clear Filter
+            </Button>
+          </Box>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-4 container mx-auto">
           {filteredUsers?.map((user) => (
             <UserCard
