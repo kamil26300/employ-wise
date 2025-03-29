@@ -47,6 +47,13 @@ const UserList = () => {
     loadUsers();
   }, [usersResponse.page]);
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }, [usersResponse.page]);
+
   const handleDelete = async (id) => {
     setDeletingUserId(id);
     try {
@@ -136,7 +143,7 @@ const UserList = () => {
         }}
       >
         <Toolbar sx={{ justifyContent: "space-between" }}>
-          <Typography variant="h6">User Management</Typography>
+          <Typography variant="h4">User Management</Typography>
           <Button
             color="error"
             onClick={handleLogout}
